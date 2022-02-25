@@ -29,7 +29,11 @@ tbl_TARGET_DICTIONARY <-
 
 ##
 tbl_TARGET_SEQ <-
-  readr::read_tsv("chembl_29_fa.tsv", col_names = c("chembl_id", "tseq"), show_col_types = FALSE)
+  readr::read_tsv(
+    "chembl_29_fa.tsv",
+    col_names = c("chembl_id", "tseq"),
+    show_col_types = FALSE
+  )
 tbl_TARGET_SEQ$chembl_id <- gsub("^ ", "", tbl_TARGET_SEQ$chembl_id)
 tbl_TARGET_SEQ$chembl_id <-
   gsub(" .*$", "", tbl_TARGET_SEQ$chembl_id)
@@ -41,7 +45,8 @@ tbl_COMPOUND_STRUCTURES <-
   dplyr::select(molregno, canonical_smiles)
 
 ##
-tbl_PROTEIN_CLASS <- readr::read_csv("data/Protein_class.csv.gz", show_col_types = FALSE)
+tbl_PROTEIN_CLASS <-
+  readr::read_csv("data/Protein_class.csv.gz", show_col_types = FALSE)
 table(tbl_PROTEIN_CLASS$l1)
 
 ##
@@ -77,7 +82,8 @@ length(one_to_one)
 ## Keep median for each interaction pair, add class, and export
 df_values_with_class <- tbl_ALL %>%
   dplyr::group_by(pair) %>%
-  dplyr::mutate(standard_value_median = median(standard_value), n = n()) %>%
+  dplyr::mutate(standard_value_median = median(standard_value),
+                n = n()) %>%
   dplyr::ungroup() %>%
   dplyr::select(l1, l2, canonical_smiles, tseq, standard_value_median, n) %>%
   unique()
@@ -85,8 +91,10 @@ df_values_with_class <- tbl_ALL %>%
 df_values_with_class_subset <-
   df_values_with_class %>%
   dplyr::filter(l1 == "Enzyme" & l2 == "Kinase") %>%
-  dplyr::select(-l1, -l2, -n)
+  dplyr::select(-l1,-l2,-n)
 
-readr::write_csv(df_values_with_class_subset,
-                 paste0("data/", potency_type, "_median_EK.tsv.gz"),
-                 col_names = FALSE)
+readr::write_csv(
+  df_values_with_class_subset,
+  paste0("data/", potency_type, "_median_EK.tsv.gz"),
+  col_names = FALSE
+)
