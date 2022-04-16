@@ -1,7 +1,6 @@
 rm(list = ls())
 library(tidyverse)
 
-
 ##
 potency_type <- "Ki"
 
